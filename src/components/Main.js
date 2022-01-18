@@ -2,16 +2,29 @@ import React, { Component } from 'react';
 
 class Main extends Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      products: this.props.products
+    }
+  }
+
   render() {
+
+    const addProduct = (event) => {
+      event.preventDefault()
+      const name = this.productName.value
+      const price = window.web3.utils.toWei(this.productPrice.value.toString(), 'Ether')
+      this.props.createProduct(name, price)
+      if(this.props.loading != true){
+        this.state.products = this.props.products;
+      }
+    }
+
     return (
       <div id="content">
         <h1>Add Product</h1>
-        <form onSubmit={(event) => {
-          event.preventDefault()
-          const name = this.productName.value
-          const price = window.web3.utils.toWei(this.productPrice.value.toString(), 'Ether')
-          this.props.createProduct(name, price)
-        }}>
+        <form onSubmit={(event) => {addProduct(event)}}>
           <div className="form-group mr-sm-2">
             <input
               id="productName"
@@ -45,7 +58,7 @@ class Main extends Component {
             </tr>
           </thead>
           <tbody id="productList">
-            { this.props.products.map((product, key) => {
+            { this.state.products.map((product, key) => {
               return(
                 <tr key={key}>
                   <th scope="row">{product.id.toString()}</th>

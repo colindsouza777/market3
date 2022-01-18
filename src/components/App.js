@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Web3 from 'web3'
-import logo from '../logo.png';
 import './App.css';
 import Marketplace from '../abis/Marketplace.json'
 import Navbar from './Navbar'
@@ -67,7 +66,8 @@ class App extends Component {
   createProduct(name, price) {
     this.setState({ loading: true })
     this.state.marketplace.methods.createProduct(name, price).send({ from: this.state.account })
-    .once('receipt', (receipt) => {
+    .on("transactionHash", (transactionHash) => {
+      console.log('Entered function blah');
       this.setState({ loading: false })
     })
   }
@@ -75,7 +75,8 @@ class App extends Component {
   purchaseProduct(id, price) {
     this.setState({ loading: true })
     this.state.marketplace.methods.purchaseProduct(id).send({ from: this.state.account, value: price })
-    .once('receipt', (receipt) => {
+    .on("transactionHash", (transactionHash) => {
+      console.log('Entered function blah');
       this.setState({ loading: false })
     })
   }
@@ -90,6 +91,7 @@ class App extends Component {
               { this.state.loading
                 ? <div id="loader" className="text-center"><p className="text-center">Loading...</p></div>
                 : <Main
+                  loading = {this.state.loading}
                   products={this.state.products}
                   createProduct={this.createProduct}
                   purchaseProduct={this.purchaseProduct} />
