@@ -67,7 +67,6 @@ class App extends Component {
     this.setState({ loading: true })
     this.state.marketplace.methods.createProduct(name, price).send({ from: this.state.account })
     .on("transactionHash", (transactionHash) => {
-      console.log('Entered function blah');
       this.setState({ loading: false })
     })
   }
